@@ -1,12 +1,16 @@
 {
   "name": "mrp-info",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "dist/index.js",
   "types": "typing/index.d.ts",
   "directories": {},
   "scripts": {
     "build": "tsc"
+  },
+  "repository": {
+	  "type": "git",
+	  "url": "https://github.com/mrp-lib/mrp-info.git"
   },
   "keywords": [
 	  "mrp",

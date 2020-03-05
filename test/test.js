@@ -28,11 +28,6 @@ fs.readdirSync(mrpdir).filter(file => path.extname(file) == '.mrp').map(file => 
 			`dataFrom:		\x1b[24G ${info.dataFrom}\n`,
 			`files:			\x1b[24G ${info.files.length}\n`,
 		)
-		// info.files.forEach(file => {
-		// 	if (path.extname(file.filename) == '.bmp' && file.dataGziped) {
-		// 		fs.writeFileSync(path.join(__dirname, 'imgs', file.filename), file.dataGziped)
-		// 	}
-		// })
 	}
 	else {
 		console.log(

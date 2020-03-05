@@ -1,0 +1,29 @@
+{
+  "name": "mrp-info",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "directories": {},
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+	  "mrp",
+	  "mrpinfo",
+	  "info",
+	  "mtk",
+	  "冒泡",
+	  "斯凯"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/iconv": "^2.1.16",
+    "@types/node": "^13.7.7",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "iconv": "^2.3.5"
+  }
+}

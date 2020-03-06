@@ -40,7 +40,7 @@ function parseFile(file) {
 //测试mrp信息
 const mrpdir = path.join(__dirname, 'mrps')
 //测试全部文件
-fs.readdirSync(mrpdir).filter(file => path.extname(file) == '.mrp').map(file => path.join(mrpdir, file)).forEach(file => parseFile(file))
-console.log(`------------------------------------------------------------`)
+// fs.readdirSync(mrpdir).filter(file => path.extname(file) == '.mrp').map(file => path.join(mrpdir, file)).forEach(file => parseFile(file))
+// console.log(`------------------------------------------------------------`)
 
-// parseFile(path.join(mrpdir, 'unknown.mrp'))
+parseFile(path.join(mrpdir, '0d8c1db4534f3a8296cd5e8e8346d18d.mrp'))

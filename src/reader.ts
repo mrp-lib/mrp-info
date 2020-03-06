@@ -1,4 +1,3 @@
-import { gbk2utf8 } from './code'
 import zlib from 'zlib'
 import fs from 'fs'
 import { NotMrpError, GunzipError, ReadInfoError, Utf8DecodeError } from './errors'
@@ -8,18 +7,32 @@ import { IGetMrpInfoOption, IMrpFile, IMrpInfo } from './type'
 //从buffer中读取字符串
 function stringFromBuffer(buffer: Buffer, from: number, to: number) {
 	//得到内容
-	const buf = (() => {
-		try {
-			let res = Buffer.alloc(to - from)
-			buffer.copy(res, 0, from)
-			return gbk2utf8(res)
-		} catch (err) {
-			throw new Utf8DecodeError()
+	const buf = ((): Buffer => {
+		let res = Buffer.alloc(to - from)
+		buffer.copy(res, 0, from)
+		//删除多余的0
+		for (let i = 0; i < res.length; i++) {
+			if (res[i] == 0) {
+				res = res.slice(0, i)
+				break
+			}
 		}
+		//尝试几次解码
+		const Iconv = require('iconv').Iconv
+		for (let i = 0; i < buffer.length; i++) {
+			if (i != 0) res[res.length - i] = 0
+			try {
+				return new Iconv('GBK', 'UTF-8').convert(res)
+			} catch (err) {
+			}
+		}
+		//如果都没有成功则抛出错误
+		throw new Utf8DecodeError()
 	})()
 	//处理一下\u0000
-	return buf.filter(n => n !== 0).toString().trim()
+	return buf!.filter(n => n !== 0).toString().trim()
 }
+
 
 /**
  * 从给定的文件内容中解析mrp信息
@@ -83,7 +96,10 @@ export function getMrpInfo<G extends boolean = false>(content: Buffer, option?: 
 				//进行zip解压
 				dataGziped: _gunzip ? (() => {
 					try {
-						return zlib.gunzipSync(data)
+						//检测是不是gzip压缩
+						if (data[0] == 0x1f && data[1] == 0x8b) return zlib.gunzipSync(data)		//gzip格式
+						//否则不处理
+						return data
 					} catch (err) {
 						throw new GunzipError()
 					}
@@ -102,6 +118,7 @@ export function getMrpInfo<G extends boolean = false>(content: Buffer, option?: 
 	} catch (err) {
 		//保持现有异常
 		if (err instanceof NotMrpError) throw err
+		if (err instanceof Utf8DecodeError) throw err
 		if (err instanceof GunzipError) throw err
 		//其他异常
 		throw new ReadInfoError()

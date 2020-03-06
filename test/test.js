@@ -7,9 +7,8 @@ tsNode.register({
 	files: true,
 })
 
-//测试mrp信息
-const mrpdir = path.join(__dirname, 'mrps')
-fs.readdirSync(mrpdir).filter(file => path.extname(file) == '.mrp').map(file => path.join(mrpdir, file)).forEach(file => {
+
+function parseFile(file) {
 	const { getMrpInfoFromFile } = require('../src/index.ts')
 	const info = getMrpInfoFromFile(file, { gunzip: true })
 	if (info) {
@@ -36,5 +35,12 @@ fs.readdirSync(mrpdir).filter(file => path.extname(file) == '.mrp').map(file => 
 			`info: null`
 		)
 	}
-})
+}
+
+//测试mrp信息
+const mrpdir = path.join(__dirname, 'mrps')
+//测试全部文件
+fs.readdirSync(mrpdir).filter(file => path.extname(file) == '.mrp').map(file => path.join(mrpdir, file)).forEach(file => parseFile(file))
 console.log(`------------------------------------------------------------`)
+
+// parseFile(path.join(mrpdir, 'unknown.mrp'))

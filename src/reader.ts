@@ -6,17 +6,22 @@ import { IGetMrpInfoOption, IMrpFile, IMrpInfo } from './type'
 
 //从buffer中读取字符串
 function stringFromBuffer(buffer: Buffer, from: number, to: number) {
-	let res = Buffer.alloc(to - from)
-	buffer.copy(res, 0, from)
-	try {
-		return gbk2utf8(res).toString().trim()
-	} catch (err) {
+	//得到内容
+	const buf = (() => {
+		let res = Buffer.alloc(to - from)
+		buffer.copy(res, 0, from)
 		try {
-			return gbk2utf8(res, 'gb2312').toString().trim()
+			return gbk2utf8(res)
 		} catch (err) {
-			return res.toString().trim()
+			try {
+				return gbk2utf8(res, 'gb2312')
+			} catch (err) {
+				return res
+			}
 		}
-	}
+	})()
+	//处理一下\u0000
+	return buf.filter(n => n !== 0).toString().trim()
 }
 
 /**

@@ -1,6 +1,6 @@
 {
   "name": "mrp-info",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "",
   "main": "dist/index.js",
   "types": "typing/index.d.ts",
